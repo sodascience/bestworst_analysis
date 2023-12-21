@@ -67,6 +67,18 @@ The second analysis script [`04_regress_log_worth.R`](04_regress_log_worth.R) pe
 1 languagemodel_prediction_evilness 0.142  0.144 0.272 0.257 -0.301 0.587  1.00    3201.    4100.
 ```
 
+## Contributing
+
+Contributions are what make the open source community an amazing place to learn, inspire, and create.
+
+Any contributions you make are greatly appreciated.
+
+To contribute:
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## Contact
 
