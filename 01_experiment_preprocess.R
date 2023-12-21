@@ -62,3 +62,41 @@ rnk_df <-
 
 # write to processed data folder
 write_rds(rnk_df, "data_processed/rnk_df_full.rds")
+
+# Now, create subsetted data 
+# - only participants who fully passed the attention check
+# - remove trials with response time <= 3 seconds
+# - remove trials with log-response time >= 4 sd (i.e., approx 27 seconds)
+rt_lower_bound <- 3
+log_rt <- log(trials_df$trial_response_time)
+rt_upper_bound <- exp(mean(log_rt) + 4*sd(log_rt))
+
+trials_df |> 
+  ggplot(aes(x = trial_response_time)) + 
+  annotate("area", x = c(rt_lower_bound, rt_upper_bound), y = c(Inf, Inf), fill = "#ffa500", alpha = 0.4) +
+  geom_histogram(bins = 120, fill = "darkblue") +
+  geom_vline(xintercept = c(rt_lower_bound, rt_upper_bound), linetype = 3, colour = "#ffa500") +
+  scale_x_continuous(trans = "log10") +
+  theme_minimal() +
+  labs(
+    x = "Trial response time (seconds)", 
+    y = "Number of trials",
+    title = "Histogram of response times",
+    subtitle = "Shaded area indicates trial inclusion"
+  )
+
+ggsave("figures/trial_rt_inclusion.png", width = 10, height = 6, bg = "white")
+
+rnk_df_subset <- 
+  rnk_df |> 
+  left_join(meta_df |> select(subj_id, attention_ok), by = join_by(subj_id)) |> 
+  filter(attention_ok) |> 
+  select(-attention_ok) |> 
+  filter(
+    trial_response_time > rt_lower_bound,
+    trial_response_time < rt_upper_bound
+  )
+  
+# write to processed data folder
+write_rds(rnk_df_subset, "data_processed/rnk_df_subset.rds")
+  

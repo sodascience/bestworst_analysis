@@ -1,5 +1,5 @@
 # analysis script to estimate item log-worths for best-worst scaling dataset
-# last edited 20230419 by @vankesteren
+# last edited 20231221 by @vankesteren
 
 # Preparation ----
 # packages & functions
@@ -10,11 +10,11 @@ source("stan/create_stan_data.R") # functions to create stan data from rank and 
 source("stan/summary_functions.R") # functions to easily summarize fitted model
 
 # read data
-rnk_df <- read_rds("data_processed/rnk_df_full.rds")
+rnk_df <- read_rds("data_processed/rnk_df_subset.rds")
+meta_df <- read_rds("data_processed/meta_df.rds")
 
 # compile stan model
 rol_model <- cmdstan_model("stan/rank_ordered_logit_regression.stan")
-
 
 # Example analysis ----
 # create data to pass to stan
@@ -38,9 +38,9 @@ mean_loglik_per_subj(fit, dat) |> arrange(ll)
 
 # Plot ----
 # make evilness plot for the three word-types
-dat_firstnames <- stan_dat_filter(rnk_df, assoc = "kwaadaardigheid", wrdtp = "voornamen") 
-dat_companies  <- stan_dat_filter(rnk_df, assoc = "kwaadaardigheid", wrdtp = "bedrijfsnamen") 
-dat_nonwords   <- stan_dat_filter(rnk_df, assoc = "kwaadaardigheid", wrdtp = "nepwoorden") 
+dat_firstnames <- stan_dat_filter(rnk_df, assoc = "slecht", wrdtp = "namen") 
+dat_companies  <- stan_dat_filter(rnk_df, assoc = "slecht", wrdtp = "bedrijfsnamen") 
+dat_nonwords   <- stan_dat_filter(rnk_df, assoc = "slecht", wrdtp = "nepwoorden") 
 
 fit_firstnames <- rol_model$sample(dat_firstnames$stan_dat, chains = 8, parallel_chains = 8, iter_sampling = 1250)
 fit_companies  <- rol_model$sample(dat_companies$stan_dat, chains = 8, parallel_chains = 8, iter_sampling = 1250)
@@ -58,4 +58,3 @@ plt_nonwords   <- plot_coefs(itm_nonwords)   + labs(x = "Worth (log-odds scale)"
 plts <- (plt_firstnames + plt_companies + plt_nonwords) * theme_minimal()
 
 ggsave(filename = "evil_summary.png", plot = plts, width = 12, height = 7)
-

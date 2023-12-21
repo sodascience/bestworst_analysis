@@ -10,7 +10,7 @@ This repository uses an RStudio project. Open the [`bestworst_analysis.Rproj`](b
 
 ```r
 # install packages
-pks <- c("cmdstanr", "tidyverse", "patchwork")
+pks <- c("cmdstanr", "tidyverse", "patchwork", "arrow")
 install.packages(pks, repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 # install stan to compile & run models
@@ -44,7 +44,15 @@ The experiment data processing script ([`01_experiment_process.R`](01_experiment
 - __word__ the word belonging to this option in the trial
 - __ranking__ how the word was ranked. 1 is best, 4 is worst, and the remaining (unranked) words are given an equal middle rank (2.5).
 
-This long-format data is then stored as an `rds` file in the processed data folder. 
+In addition, the following inclusion criteria are applied: 
+
+- include only participants who fully passed the attention check (i.e., both best and worst answers correct)
+- remove trials with response time <= 3 seconds
+- remove trials with log-response time >= 4 sd (i.e., approx 27 seconds)
+
+This reduces the total number of trials from 12341 to 10266.
+
+This long-format data is then stored as an `rds` file in the processed data folder.
 
 ### Word data preprocessing
 The word data processing script [`02_word_preprocess.R`](02_word_preprocess.R) reads the word data from [`data_raw/word_data/`](./data_raw/word_data/) and stores it as processed data (an `rds` file) in the processed data folder.
