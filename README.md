@@ -27,8 +27,8 @@ $$ P(y | \theta) = \sum^N_{n=1}\left[ \exp \theta_n \div \sum^N_{m = n} \exp \th
 To learn more about these types of rank-ordered logit models, read:
 - For an intuitive understanding, the introduction from the [Plackett-Luce package](https://hturner.github.io/PlackettLuce/)
   > Turner, H.L., van Etten, J., Firth, D. and Kosmidis, I. (2020). Modelling Rankings in R: The PlackettLuce Package Computational Statistics, 35, 1027-1057. URL https://doi.org/10.1007/s00180-020-00959-3.
-- For how this maps to best-worst experiments, Case 1 & the section on Models of Ranking by Repeated Best and/or Worst Choice from [Marley, Flynn, & Australia (2015)](https://www.sciencedirect.com/science/article/pii/B9780080970868431223)
-  > Marley, A. A., Flynn, T. N., & Australia, V. (2015). Best worst scaling: theory and practice. International encyclopedia of the social & behavioral sciences, 2(2), 548-552.
+- For how this maps to best-worst experiments, Case 1 & the section on Models of Ranking by Repeated Best and/or Worst Choice from [Marley & Flynn (2015)](https://www.sciencedirect.com/science/article/pii/B9780080970868431223)
+  > Marley, A. A. & Flynn, T. N. (2015). Best worst scaling: theory and practice. International encyclopedia of the social & behavioral sciences, 2(2), 548-552.
 - For the stochastic (Bayesian) implementation: [Glickman & Hennessy (2015)](https://www.degruyter.com/document/doi/10.1515/jqas-2015-0012/html)
   > Glickman, M. E., & Hennessy, J. (2015). A stochastic rank ordered logit model for rating multi-competitor games and sports. Journal of Quantitative Analysis in Sports, 11(3), 131-144.
 
