@@ -68,9 +68,39 @@ word_scores |>
   arrange(mean) |> 
   mutate(word = as_factor(word)) |> 
   ggplot(aes(x = mean, xmin = q5, xmax = q95, y = word, color = association)) +
-  geom_pointrange() +
-  facet_grid(rows = vars(wordtype), cols = vars(association), scales = "free_y")
+  geom_pointrange(size = 0.1) +
+  facet_grid(rows = vars(wordtype), cols = vars(association), scales = "free_y") + 
+  labs(
+    title = "Word ratings (log-worths) across semantic dimensions and categories.",
+    subtitle = "Sorted by trustworthiness (betrouwbaar)",
+    x = "Posterior log-worth (bars indicate 90% CI)",
+    y = "Word"
+  ) +
+  theme_linedraw() +
+  theme(axis.text.y = element_text(size = 2))
   
+ggsave("figures/wordratings.png", dpi = 600, width = 15, height = 12)
+
+name_draws <- arrow::read_parquet("data_processed/word_draws/namen_betrouwbaar.parquet") |> 
+  filter(word %in% c("Julie", "Tinus", "Adolf"))
+
+name_draws |> 
+  ggplot(aes(x = value, fill = word)) + 
+  geom_density() + 
+  geom_vline(xintercept = 0, linetype = "dotted") +
+  theme_minimal() + 
+  geom_rug(linewidth = 0.1, alpha = 0.5) + 
+  labs(
+    title = "Rated trustworthiness of the names Adolf, Julie, and Tinus", 
+    subtitle = "Distributions based on 10000 posterior samples",
+    x = "Log-worth", 
+    y = "Density"
+  ) +
+  facet_grid(rows = vars(word)) +
+  scale_fill_discrete(guide = "none")
+
+ggsave("figures/trustworthiness_example.png", dpi = 600, width = 8, height = 5)
+
 # Output plots ----
 for (wtp in levels(rnk_df$wordtype)) {
   for (assoc in levels(rnk_df$association)) {
