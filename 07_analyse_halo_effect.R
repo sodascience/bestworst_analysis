@@ -63,3 +63,13 @@ correlations |>
   scale_fill_manual(values = c("#B0CCD8", "#C9D7B2", "#CFBCB9"))
 
 ggsave("figures/word_correlations.png", dpi = 600, width = 10, height = 7)
+
+
+# table
+correlations |> 
+  group_by(wordtype, var1, var2) |> 
+  summarize(
+    correlation = mean(value), 
+    q5 = quantile(value, 0.05),
+    q95 = quantile(value, 0.95)
+  )
