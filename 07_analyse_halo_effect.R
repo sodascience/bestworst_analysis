@@ -72,4 +72,5 @@ correlations |>
     correlation = mean(value), 
     q5 = quantile(value, 0.05),
     q95 = quantile(value, 0.95)
-  )
+  ) |> 
+  arrange(var1, var2)
